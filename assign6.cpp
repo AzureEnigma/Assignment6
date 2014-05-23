@@ -5,7 +5,7 @@ union ExprC {
 		int num;
 	};
 
-	struct bolC {
+	struct boolC {
 		int boolean;
 	};
 
@@ -38,26 +38,44 @@ union ExprC {
 	};
 }
 
-int interp(struct ExprC exprc) {
-	if ((strcmp(exprc->type, "numC"))) {
+union Value {
+	char* type;
+	
+	struct numV {
+		int num;
+	}
+	
+	struct cloV {
+		char params;
+		struct ExprC body;
+		//env
+	}
+	
+	struct boolV {
+		int boolean;
+	}
+}
+
+struct Value interp(struct ExprC expr) {
+	if ((strcmp(expr->type, "numC"))) {
         return 1;
     }
-	if ((strcmp(exprc->type, "bolC"))) {
+	if ((strcmp(expr->type, "boolC"))) {
         return 2;
     }
-	if ((strcmp(exprc->type, "idC"))) {
+	if ((strcmp(expr->type, "idC"))) {
         return 3;
     }
-	if ((strcmp(exprc->type, "ifC"))) {
+	if ((strcmp(expr->type, "ifC"))) {
         return 4;
     }
-	if ((strcmp(exprc->type, "fnC"))) {
+	if ((strcmp(expr->type, "fnC"))) {
         return 5;
     }
-	if ((strcmp(exprc->type, "binopC"))) {
+	if ((strcmp(expr->type, "binopC"))) {
         return 6;
     }
-	if ((strcmp(exprc->type, "appC"))) {
+	if ((strcmp(expr->type, "appC"))) {
         return 7;
     }
 }
