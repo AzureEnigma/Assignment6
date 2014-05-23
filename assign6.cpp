@@ -1,5 +1,7 @@
+#include <unordered_map>
+
 union ExprC {
-	char* type;
+	string type;
 	
 	struct numC {
 		int num;
@@ -10,7 +12,7 @@ union ExprC {
 	};
 
 	struct idC {
-		char symbol;
+		string symbol;
 	};
 
 	struct ifC {
@@ -23,10 +25,10 @@ union ExprC {
 		//needs to be a list
 		char params;
 		struct ExprC body;
-	}
+	};
 
 	struct binopC {
-		char operator;
+		string op;
 		struct ExprC left;
 		struct ExprC right;
 	};
@@ -39,22 +41,26 @@ union ExprC {
 }
 
 union Value {
-	char* type;
+	string type;
 	
 	struct numV {
 		int num;
-	}
+	};
 	
 	struct cloV {
-		char params;
+		string params;
 		struct ExprC body;
-		//env
-	}
+		unordered_map<string, struct Value> env;
+	};
 	
 	struct boolV {
 		int boolean;
-	}
+	};
 }
+
+unordered_map<string, struct Value> Environment;
+
+unordered_map<string, struct Value> empty-env;
 
 struct Value interp(struct ExprC expr) {
 	if ((strcmp(expr->type, "numC"))) {
