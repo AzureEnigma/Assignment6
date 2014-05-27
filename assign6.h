@@ -1,4 +1,6 @@
-#include <unordered_map>
+struct ExprC;
+
+struct Value;
 
 struct idC {
 	char* symbol;
@@ -14,27 +16,27 @@ struct boolC {
 
 
 struct ifC {
-	struct ExprC condition;
-	struct ExprC trueC;
-	struct ExprC falseC;
+	struct ExprC* condition;
+	struct ExprC* trueC;
+	struct ExprC* falseC;
 };
 
 struct fnC {
 	//needs to be a list
 	char params;
-	struct ExprC body;
+	struct ExprC* body;
 };
 
 struct binopC {
 	char* op;
-	struct ExprC left;
-	struct ExprC right;
+	struct ExprC* left;
+	struct ExprC* right;
 };
 
 struct appC {
-	struct ExprC body;
+	struct ExprC* body;
 	//needs to be a list
-	struct ExprC def;
+	struct ExprC* def;
 };
 
 struct numV {
@@ -44,7 +46,7 @@ struct numV {
 struct cloV {
 	//needs to be a list
 	char* params;
-	struct ExprC body;
+	struct ExprC* body;
 };
 
 struct boolV {
@@ -59,6 +61,7 @@ struct boolV {
 		struct appC appC;
 		struct idC idC;
 		struct binopC binopC;
+		struct fnC fnC;
 	};
 
 	struct Value {

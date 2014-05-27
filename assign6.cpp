@@ -1,6 +1,7 @@
 #include "assign6.h"
 #include "string.h"
 #include <stdio.h>
+#include <malloc.h>
 	
 
 	struct Value* interp(ExprC expr)
@@ -36,5 +37,6 @@
 		temp.numC.num = 6;
 		temp.type = "numC";
 		struct Value* temp2 = interp(temp);
+		printf("%d\n", temp2->numV.num);
 		while (1);
 	}
