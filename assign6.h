@@ -1,16 +1,12 @@
 #include <unordered_map>
 
-union ExprC {};
-
-union Value{}; 
-
 struct idC {
 	char* symbol;
 };
 
 struct numC {
 	int num;
-} numC;
+};
 
 struct boolC {
 	int boolean;
@@ -18,27 +14,27 @@ struct boolC {
 
 
 struct ifC {
-	union ExprC condition;
-	union ExprC trueC;
-	union ExprC falseC;
+	struct ExprC condition;
+	struct ExprC trueC;
+	struct ExprC falseC;
 };
 
 struct fnC {
 	//needs to be a list
 	char params;
-	union ExprC body;
+	struct ExprC body;
 };
 
 struct binopC {
 	char* op;
-	union ExprC left;
-	union ExprC right;
+	struct ExprC left;
+	struct ExprC right;
 };
 
 struct appC {
-	union ExprC body;
+	struct ExprC body;
 	//needs to be a list
-	union ExprC def;
+	struct ExprC def;
 };
 
 struct numV {
@@ -48,14 +44,14 @@ struct numV {
 struct cloV {
 	//needs to be a list
 	char* params;
-	union ExprC body;
+	struct ExprC body;
 };
 
 struct boolV {
 	int boolean;
 };
 
-	typedef union ExprC {
+	struct ExprC {
 		char* type;
 		struct numC numC;
 		struct boolC boolC;
@@ -65,7 +61,7 @@ struct boolV {
 		struct binopC binopC;
 	};
 
-	typedef union Value {
+	struct Value {
 		char* type;
 		struct numV numV;
 		struct cloV cloV;

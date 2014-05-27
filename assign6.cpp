@@ -1,50 +1,40 @@
-#include <unordered_map>
 #include "assign6.h"
 #include "string.h"
-
-std::unordered_map<std::string, Value> emptyEnv;
-
-union ExprC parse(char** expression) {
-	ExprC temp;
-	
-}
-
+#include <stdio.h>
 	
 
-union Value interp(union ExprC expr, std::unordered_map<std::string, Value> Environment)
+	struct Value* interp(ExprC expr)
 	{
-		Value temp;
-		if ((strcmp(expr.type, "numC"))) {
+		struct Value* temp = (struct Value*) calloc(1, sizeof(struct Value));
+		if (!(strcmp(expr.type, "numC"))) {
+			temp->numV.num = expr.numC.num;
+			temp->type = "numV";
+		}
+		if (!(strcmp(expr.type, "boolC"))) {
 			//change temp
 		}
-		if ((strcmp(expr.type, "boolC"))) {
+		if (!(strcmp(expr.type, "idC"))) {
+			//get symbol
+		}
+		if (!(strcmp(expr.type, "ifC"))) {
 			//change temp
 		}
-		if ((strcmp(expr.type, "idC"))) {
-			std::unordered_map<std::string, Value>::const_iterator got = Environment.find(expr.idC.symbol);
-			if (got == Environment.end()) {
-				printf("symbol not found in environment\n");
-			}
-			else
-			{
-				temp = got->second;
-			}
-		}
-		if ((strcmp(expr.type, "ifC"))) {
-			//change temp
-		}
-		if ((strcmp(expr.type, "fnC"))) {
+		if (!(strcmp(expr.type, "fnC"))) {
 			//chaneg temp
 		}
-		if ((strcmp(expr.type, "binopC"))) {
+		if (!(strcmp(expr.type, "binopC"))) {
 			//change temp
 		}
-		if ((strcmp(expr.type, "appC"))) {
+		if (!(strcmp(expr.type, "appC"))) {
 			//change temp
 		}
 		return temp;
 	}
 
 	int main() {
-
+		struct ExprC temp;
+		temp.numC.num = 6;
+		temp.type = "numC";
+		struct Value* temp2 = interp(temp);
+		while (1);
 	}
