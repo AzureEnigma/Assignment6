@@ -12,7 +12,8 @@
 			temp->type = "numV";
 		}
 		if (!(strcmp(expr.type, "boolC"))) {
-			//change temp
+			temp->boolV.boolean = expr.boolC.boolean;
+			temp->type = "boolV";
 		}
 		if (!(strcmp(expr.type, "idC"))) {
 			//get symbol
