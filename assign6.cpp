@@ -7,58 +7,65 @@
 using namespace std;
 using namespace __gnu_cxx;
 
-tr1::unordered_map<string,ExprC> empty_env;
+tr1::unordered_map<string, ExprC> empty_env;
 
 struct ExprC parse(char** expression) {
-    ExprC temp;
-    
+	ExprC temp;
+
 }
 
-struct Value interp(struct ExprC expr, tr1::unordered_map<string,ExprC> Environment)
-{
-    Value temp;
-    if ((strcmp(expr.type, "numC"))) {
-        //change temp
-    }
-    if ((strcmp(expr.type, "boolC"))) {
-        //change temp
-    }
-    if ((strcmp(expr.type, "idC"))) {
-        /*
-         hash_map<string, Value>::const_iterator got = Environment.find(expr.idC.symbol);
-         if (got == Environment.end()) {
-         printf("symbol not found in environment\n");
-         }
-         else
-         {
-         temp = got->second;
-         }
-         */
-    }
-    if ((strcmp(expr.type, "ifC"))) {
-        //change temp
-    }
-    if ((strcmp(expr.type, "fnC"))) {
-        //chaneg temp
-    }
-    if ((strcmp(expr.type, "binopC"))) {
-        //change temp
-    }
-    if ((strcmp(expr.type, "appC"))) {
-        //change temp
-    }
-    return temp;
-}
+	struct Value* interp(ExprC expr)
+	{
+		struct Value* temp = (struct Value*) calloc(1, sizeof(struct Value));
+		if (!(strcmp(expr.type, "numC"))) {
+			temp->numV.num = expr.numC.num;
+			temp->type = "numV";
+		}
+		if (!(strcmp(expr.type, "boolC"))) {
+			temp->boolV.boolean = expr.boolC.boolean;
+			temp->type = "boolV";
+		}
+		if (!(strcmp(expr.type, "idC"))) {
+			/*
+			hash_map<string, Value>::const_iterator got = Environment.find(expr.idC.symbol);
+			if (got == Environment.end()) {
+			printf("symbol not found in environment\n");
+			}
+			else
+			{
+			temp = got->second;
+			}
+			*/
+		}
+		if (!(strcmp(expr.type, "ifC"))) {
+			//change temp
+		}
+		if (!(strcmp(expr.type, "fnC"))) {
+			//chaneg temp
+		}
+		if (!(strcmp(expr.type, "binopC"))) {
+			//change temp
+		}
+		if (!(strcmp(expr.type, "appC"))) {
+			//change temp
+		}
+		return temp;
+	}
 
-int main() {
-    Value test1;
-    test1.type = "HA I WORK";
-    
-    tr1::unordered_map<string,Value> my_env;
-    my_env["test1"] = test1;
-    printf("type of test1 is %s\n", my_env["test1"].type);
-    
-    return 1;
-}
+	int main() {
+		struct ExprC temp;
+		temp.numC.num = 6;
+		temp.type = "numC";
+		struct Value* temp2 = interp(temp);
+		printf("%d\n", temp2->numV.num);
 
+		Value test1;
+		test1.type = "HA I WORK";
 
+		tr1::unordered_map<string, Value> my_env;
+		my_env["test1"] = test1;
+		printf("type of test1 is %s\n", my_env["test1"].type);
+
+		return 1;
+		while (1);
+	}
