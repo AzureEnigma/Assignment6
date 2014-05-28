@@ -12,28 +12,21 @@ tr1::unordered_map<string, ExprC> empty_env;
 struct ExprC parse(char** expression) throw(string) {
     ExprC temp;
     if (isdigit(**expression)) {
-        temp.type = (char *)calloc(1, strlen("numC"));
-        strcpy(temp.type, "numC");
+        temp.type = "numC";
         temp.numC.num = atoi(*expression);
     } else if (strcmp(*expression, "true") == 0) {
-        temp.type = (char *)calloc(1, strlen("boolC"));
-        strcpy(temp.type, "boolC");
+        temp.type = "boolC";
         temp.boolC.boolean = 1;
     } else if (strcmp(*expression, "false") == 0) {
-        temp.type = (char *)calloc(1, strlen("boolC"));
-        strcpy(temp.type, "boolC");
+        temp.type = "boolC";
         temp.boolC.boolean = 0;
     } else if (strcmp(*expression, "if") == 0) {
-        temp.type = (char *)calloc(1, strlen("ifC"));
-        strcpy(temp.type, "ifC");
+        temp.type = "ifC";
     } else if (strcmp(*expression, "with") == 0) {
-        temp.type = (char *)calloc(1, strlen("appC"));
-        strcpy(temp.type, "appC");
+        temp.type = "appC";
     } else if (strcmp(*expression, "fn") == 0) {
-        temp.type = (char *)calloc(1, strlen("fnC"));
-        strcpy(temp.type, "fnC");
-        temp.fnC.params = (char *)calloc(1, strlen(expression[1]));
-        memcpy(temp.fnC.params, expression[1], strlen(expression[1]));
+        temp.type = "fnC";
+        temp.fnC.params = expression[1];
         temp.fnC.body = (struct ExprC*) calloc(1, sizeof(struct ExprC));
         struct ExprC parsedBody = parse(&expression[2]);
         memcpy(temp.fnC.body, &parsedBody, sizeof(struct ExprC));
@@ -96,6 +89,39 @@ struct ExprC parse(char** expression) throw(string) {
 		tr1::unordered_map<string, Value> my_env;
 		my_env["test1"] = test1;
 		printf("type of test1 is %s\n", my_env["test1"].type);
+        
+        //Nicki added everything below
+        struct ExprC testC;
+        struct Value* testV;
+        
+        //numC test
+        char *numPtr[] = {"3"};
+        testC = parse(numPtr);
+        printf("type %s with num %d\n", testC.type, testC.numC.num);
+        testV = interp(testC, empty_env);
+        printf("type %s with num %d\n", testV->type, testV->numV.num);
+        
+        //boolC test
+        char *boolPtr[] = {"true"};
+        testC = parse(boolPtr);
+        printf("type %s with boolean %d\n", testC.type, testC.boolC.boolean);
+        testV = interp(testC, empty_env);
+        printf("type %s with boolean %d\n", testV->type, testV->boolV.boolean);
+        
+        boolPtr = {"false"};
+        testC = parse(boolPtr);
+        printf("type %s with boolean %d\n", testC.type, testC.boolC.boolean);
+        testV = interp(testC, empty_env);
+        printf("type %s with boolean %d\n", testV->type, testV->boolV.boolean);
+        
+        //fnC test
+        char *fnPtr[] = {"fn", "a", "3"};
+        testC = parse(fnPtr);
+        printf("type %s with param \"%s\" and body of type %s\n",
+               testC.type, testC.fnC.params, testC.fnC.body->type);
+        testV = interp(testC, empty_env);
+        printf("type %s with param \"%s\" and body of type %s\n",
+               testV->type, testV->cloV.params, testV->cloV.body->type);
 
 		return 1;
 		while (1);
