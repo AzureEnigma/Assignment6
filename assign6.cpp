@@ -9,31 +9,27 @@ using namespace __gnu_cxx;
 
 tr1::unordered_map<string, ExprC> empty_env;
 
-struct ExprC parse(char** expression) {
-	ExprC temp;
-    if (strcmp(*expression, "true") == 0) {
+struct ExprC parse(char** expression) throw(string) {
+    ExprC temp;
+    if (isdigit(**expression)) {
+        temp.type = (char *)calloc(1, strlen("numC"));
+        strcpy(temp.type, "numC");
+        temp.numC.num = atoi(*expression);
+    } else if (strcmp(*expression, "true") == 0) {
         temp.type = (char *)calloc(1, strlen("boolC"));
         strcpy(temp.type, "boolC");
         temp.boolC.boolean = 1;
-    }
-    if (strcmp(*expression, "false") == 0) {
+    } else if (strcmp(*expression, "false") == 0) {
         temp.type = (char *)calloc(1, strlen("boolC"));
         strcpy(temp.type, "boolC");
         temp.boolC.boolean = 0;
-    }
-    if (strcmp(*expression, "if") == 0) {
+    } else if (strcmp(*expression, "if") == 0) {
         temp.type = (char *)calloc(1, strlen("ifC"));
         strcpy(temp.type, "ifC");
-    }
-    if (strcmp(*expression, "with") == 0) {
+    } else if (strcmp(*expression, "with") == 0) {
         temp.type = (char *)calloc(1, strlen("appC"));
         strcpy(temp.type, "appC");
-    }
-    if (strcmp(*expression, "fn") == 0) {
-        temp.type = (char *)calloc(1, strlen("fnC"));
-        strcpy(temp.type, "fnC");
-    }
-    if (strcmp(*expression, "fn") == 0) {
+    } else if (strcmp(*expression, "fn") == 0) {
         temp.type = (char *)calloc(1, strlen("fnC"));
         strcpy(temp.type, "fnC");
         temp.fnC.params = (char *)calloc(1, strlen(expression[1]));
