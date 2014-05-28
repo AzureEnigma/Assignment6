@@ -11,7 +11,40 @@ tr1::unordered_map<string, ExprC> empty_env;
 
 struct ExprC parse(char** expression) {
 	ExprC temp;
-
+    if (strcmp(*expression, "true") == 0) {
+        temp.type = (char *)calloc(1, strlen("boolC"));
+        strcpy(temp.type, "boolC");
+        temp.boolC.boolean = 1;
+    }
+    if (strcmp(*expression, "false") == 0) {
+        temp.type = (char *)calloc(1, strlen("boolC"));
+        strcpy(temp.type, "boolC");
+        temp.boolC.boolean = 0;
+    }
+    if (strcmp(*expression, "if") == 0) {
+        temp.type = (char *)calloc(1, strlen("ifC"));
+        strcpy(temp.type, "ifC");
+    }
+    if (strcmp(*expression, "with") == 0) {
+        temp.type = (char *)calloc(1, strlen("appC"));
+        strcpy(temp.type, "appC");
+    }
+    if (strcmp(*expression, "fn") == 0) {
+        temp.type = (char *)calloc(1, strlen("fnC"));
+        strcpy(temp.type, "fnC");
+    }
+    if (strcmp(*expression, "fn") == 0) {
+        temp.type = (char *)calloc(1, strlen("fnC"));
+        strcpy(temp.type, "fnC");
+        temp.fnC.params = (char *)calloc(1, strlen(expression[1]));
+        memcpy(temp.fnC.params, expression[1], strlen(expression[1]));
+        temp.fnC.body = (struct ExprC*) calloc(1, sizeof(struct ExprC));
+        struct ExprC parsedBody = parse(&expression[2]);
+        memcpy(temp.fnC.body, &parsedBody, sizeof(struct ExprC));
+    } else {
+        throw "not implemented";
+    }
+    return temp;
 }
 
 	struct Value* interp(ExprC expr)
@@ -41,7 +74,9 @@ struct ExprC parse(char** expression) {
 			//change temp
 		}
 		if (!(strcmp(expr.type, "fnC"))) {
-			//chaneg temp
+            temp->type = "cloV";
+            temp->cloV.params = expr.fnC.params;
+            temp->cloV.body = expr.fnC.body;
 		}
 		if (!(strcmp(expr.type, "binopC"))) {
 			//change temp
