@@ -22,6 +22,17 @@ struct ExprC parse(char** expression) throw(string) {
         temp.boolC.boolean = 0;
     } else if (strcmp(*expression, "if") == 0) {
         temp.type = "ifC";
+        temp.ifC.condition = (struct ExprC*) calloc(1, sizeof(struct ExprC));
+        struct ExprC parsedCond = parse(&expression[2]);
+        memcpy(temp.ifC.condition, &parsedCond, sizeof(struct ExprC));
+        
+        temp.ifC.trueC = (struct ExprC*) calloc(1, sizeof(struct ExprC));
+        struct ExprC parsedTrue = parse(&expression[3]);
+        memcpy(temp.ifC.trueC, &parsedTrue, sizeof(struct ExprC));
+        
+        temp.ifC.falseC = (struct ExprC*) calloc(1, sizeof(struct ExprC));
+        struct ExprC parsedFalse = parse(&expression[4]);
+        memcpy(temp.ifC.falseC, &parsedFalse, sizeof(struct ExprC));
     } else if (strcmp(*expression, "with") == 0) {
         temp.type = "appC";
     } else if (strcmp(*expression, "fn") == 0) {
@@ -60,7 +71,18 @@ struct ExprC parse(char** expression) throw(string) {
 			*/
 		}
 		if (!(strcmp(expr.type, "ifC"))) {
-			//change temp
+			struct Value* condTemp = interp(expr.ifC.condition);
+			
+			if (!(strcmp(condTemp.type, "boolV")) {
+				throw "if statement condition not a boolean"
+			}
+			
+			if (condTemp->boolV.boolean != 0) {
+				temp = interp(expr.ifC.trueC);
+			}
+			else {
+				temp = interp(expr.ifC.falseC);
+			}
 		}
 		if (!(strcmp(expr.type, "fnC"))) {
             temp->type = "cloV";
@@ -122,6 +144,40 @@ struct ExprC parse(char** expression) throw(string) {
         testV = interp(testC, empty_env);
         printf("type %s with param \"%s\" and body of type %s\n",
                testV->type, testV->cloV.params, testV->cloV.body->type);
+        
+        //ifC tests
+        char *ifTestTrue[] = {"if", "true", "2", "3"};
+        testC = parse(ifTestTrue);
+        testV = interp(testC, empty_env);
+        printf("expected output: numV 2, got: %s %s",testV->type, testV->numV.num);
+        
+        char *ifTestFalse[] = {"if", "false", "2", "3"};
+        testC = parse(ifTestFalse);
+        testV = interp(testC, empty_env);
+        printf("expected output: numV 3, got: %s %s",testV->type, testV->numV.num);
+        
+        char *ifTest[] = {"if", {">", "1", "2"}, {"+", "1", "2"}, {"+", "1", "1"}};
+        testC = parse(ifTest);
+        testV = interp(testC, empty_env);
+        printf("expected output: numV 2, got: %s %s",testV->type, testV->numV.num);
+        
+        char *ifTestBool[] = {"if", "true", "true", "false"};
+        testC = parse(ifTestBool);
+        testV = interp(testC, empty_env);
+        printf("expected output: boolV true, got: %s %s",testV->type, testV->boolV.boolean);
+        
+        char *ifTestClo[] = {"if", "true", {"fn", "x", "1"}, "3"};
+        testC = parse(ifTestClo);
+        testV = interp(testC, empty_env);
+        printf("expected output: cloV x 1, got: %s %s %s",
+         testV->type, testV->cloV.params, testV->cloV.body);
+        
+        char *ifTestError[] = {"if", "1", "2", "3"};
+        testC = parse(ifTestError);
+        testV = interp(testC, empty_env);
+        printf("expected output: error, got: %s", testV->numV.num);
+        
+
 
 		return 1;
 		while (1);
