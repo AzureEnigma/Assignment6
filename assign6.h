@@ -14,7 +14,6 @@ struct boolC {
 	int boolean;
 };
 
-
 struct ifC {
 	struct ExprC* condition;
 	struct ExprC* trueC;
@@ -23,7 +22,7 @@ struct ifC {
 
 struct fnC {
 	//needs to be a list
-	char params;
+	char* params;
 	struct ExprC* body;
 };
 
